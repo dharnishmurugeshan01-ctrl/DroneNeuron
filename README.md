@@ -18,7 +18,7 @@
 
 ## What This Is
 
-DroneBrain is a personal R&D project that turns a drone into an autonomous aerial observer. The goal is to build a system where the drone can detect and track objects in its environment, respond to hand gestures and eye gaze for control, generate natural language descriptions of what it sees, and make basic navigation decisions on its own.
+DroneNueron is a personal R&D project that turns a drone into an autonomous aerial observer. The goal is to build a system where the drone can detect and track objects in its environment, respond to hand gestures and eye gaze for control, generate natural language descriptions of what it sees, and make basic navigation decisions on its own.
 
 Everything is tested in AirSim simulation before touching any physical hardware. The project is being built in phases — right now the focus is getting the vision pipeline solid.
 
