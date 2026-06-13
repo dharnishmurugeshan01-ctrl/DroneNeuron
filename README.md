@@ -2,7 +2,7 @@
   <img src="assets/dronebrain_banner.png" alt="DroneBrain" width="100%"/>
 </p>
 
-<h1 align="center">DroneBrain</h1>
+<h1 align="center">DroneNueron</h1>
 <p align="center">Real-time aerial intelligence — vision, autonomy, and gesture control in one pipeline</p>
 
 <p align="center">
