@@ -102,8 +102,8 @@ The gaze control system uses MediaPipe Face Mesh to track 468 facial landmarks i
 ## Installation
 
 ```bash
-git clone https://github.com/yourusername/DroneBrain.git
-cd DroneBrain
+git clone https://github.com/dharnishmurugeshan01-ctrl/DroneNeuron.git
+cd DroneNueron
 
 python -m venv venv
 source venv/bin/activate        # Windows: venv\Scripts\activate
