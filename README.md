@@ -1,5 +1,4 @@
 <p align="center">
-  <img src="assets/dronebrain_banner.png" alt="DroneBrain" width="100%"/>
 </p>
 
 <h1 align="center">DroneNueron</h1>
