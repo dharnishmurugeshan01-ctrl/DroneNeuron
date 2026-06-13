@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/dronebrain_banner.png" alt="DroneBrain" width="100%"/>
+  <img src="assets/brain_neural.png" alt="DroneBrain Neural Network" width="100%"/>
 </p>
 
 <h1 align="center">DroneBrain</h1>
@@ -19,7 +19,7 @@
 
 ## What This Is
 
-DroneBrain is a personal R&D project that turns a drone into an autonomous aerial observer. The goal is to build a system where the drone can detect and track objects in its environment, respond to hand gestures and eye gaze for control, generate natural language descriptions of what it sees, and make basic navigation decisions on its own.
+DroneBrain is a personal R&D project that turns a drone into an autonomous aerial observer. The goal is to build a system where the drone can detect and track objects in its environment, respond to hand gestures and eye gaze, and autonomously plan a patrol route while locking onto high-value targets.
 
 Everything is tested in AirSim simulation before touching any physical hardware. The project is being built in phases — right now the focus is getting the vision pipeline solid.
 
@@ -28,37 +28,35 @@ Everything is tested in AirSim simulation before touching any physical hardware.
 ## Hardware Overview
 
 <p align="center">
-  <img src="assets/drone_parts.jpg" alt="Drone hardware components" width="72%"/>
+  <img src="assets/drone_parts.png" alt="Drone hardware components" width="72%"/>
 </p>
 
-The platform uses a standard quadcopter layout — four brushless motors driven by individual ESCs, a central flight controller, power distribution board, FPV camera, and an FPV transmitter for live video. The flight controller is where DroneBrain hooks in to issue commands programmatically via AirSim during development.
+The platform uses a standard quadcopter layout — four brushless motors driven by individual ESCs, a central flight controller, power distribution board, FPV camera, and an FPV transmitter for live video downlink. Every component is off-the-shelf and widely available.
 
 ---
 
 ## Core Modules
 
 **DroneDXY Control Engine**
-Takes MediaPipe landmark data from a webcam — hand poses and face mesh gaze vectors — and converts them into discrete flight commands: `FORWARD`, `BACKWARD`, `LEFT`, `RIGHT`, `UP`, `DOWN`, `ROTATE_LEFT`, `ROTATE_RIGHT`, `HOVER`, `LAND`. Confidence thresholds filter noise before anything gets dispatched to the drone.
+Takes MediaPipe landmark data from a webcam — hand poses and face mesh gaze vectors — and converts them into discrete flight commands: `FORWARD`, `BACKWARD`, `LEFT`, `RIGHT`, `UP`, `DOWN`, `ROTATE_LEFT`, `ROTATE_RIGHT`, and `LAND`.
 
 **Vision Intelligence**
-YOLOv8 (nano/small) fine-tuned on the VisDrone2019-DET dataset. Runs inference on each camera frame and returns bounding boxes, class labels, and confidence scores across 10 aerial object categories — pedestrians, vehicles, bicycles, trucks, and more.
+YOLOv8 (nano/small) fine-tuned on the VisDrone2019-DET dataset. Runs inference on each camera frame and returns bounding boxes, class labels, and confidence scores across 10 aerial object categories (person, car, truck, bus, train, bike, motor, etc.).
 
 **Autonomous Decision Engine**
-Consumes detection results and drone state to plan the next move. Priority order: hold a locked target if one exists, avoid any obstacle within threshold distance, otherwise continue the patrol path. The rule engine is intentionally modular so it can be replaced with a learned policy later.
+Consumes detection results and drone state to plan the next move. Priority order: hold a locked target if one exists, avoid any obstacle within threshold distance, otherwise continue the patrol path. Outputs the next flight command every frame.
 
 **AI Content Engine**
-Selects the highest-confidence frames from each flight segment and sends them to GPT-4 Vision with a structured prompt. Gets back JSON-formatted scene captions that are attached to each frame in the patrol report and surfaced on the dashboard.
+Selects the highest-confidence frames from each flight segment and sends them to GPT-4 Vision with a structured prompt. Gets back JSON-formatted scene captions that are attached to each frame in the patrol report.
 
 ---
 
 ## Eye Tracking & Face Mesh Control
 
-The gaze control system uses MediaPipe Face Mesh to track 468 facial landmarks in real time. From those landmarks it extracts the gaze vector — where the user's eyes are pointing — and maps it to camera rotation and drone heading. The yellow and cyan lines in the demo below show the computed gaze direction being projected onto the screen plane.
+The gaze control system uses MediaPipe Face Mesh to track 468 facial landmarks in real time. From those landmarks it extracts the gaze vector — where the user's eyes are pointing — and maps it to camera pan/tilt commands. Blink detection enables mode switching and emergency stop.
 
 <p align="center">
-  <img src="assets/face_mesh.jpg" alt="MediaPipe face mesh landmark overlay" width="45%"/>
-  &nbsp;&nbsp;&nbsp;
-  <img src="assets/eye_tracking.jpg" alt="Live eye tracking gaze vector demo" width="45%"/>
+  <img src="assets/face_mesh_tracking.png" alt="MediaPipe face mesh and eye tracking demo" width="60%"/>
 </p>
 
 ---
@@ -112,7 +110,7 @@ source venv/bin/activate        # Windows: venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-For simulation, download the [AirSim binary](https://github.com/microsoft/AirSim/releases) for your OS and place it outside the project directory. The pipeline connects over the default localhost socket.
+For simulation, download the [AirSim binary](https://github.com/microsoft/AirSim/releases) for your OS and place it outside the project directory. The pipeline connects over the default localhost socket by default.
 
 ---
 
